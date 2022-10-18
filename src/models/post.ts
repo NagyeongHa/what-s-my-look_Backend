@@ -79,7 +79,8 @@ export const findByTemperatureAndStyle = async (
 
 // post_id로 게시글 1개 조회
 export const findByPostId = async (post_id: number) => {
-  const query = "SELECT * FROM post WHERE post_id = ?";
+  const query =
+    "SELECT p.*,u.name FROM post p INNER JOIN user u ON p.sns_id = u.sns_id WHERE post_id = ?;";
   try {
     const [rows] = await db.execute(query, [post_id]);
     return rows;

@@ -32,3 +32,10 @@ export const findByTemperatureAndStyle = async (
   const data = await PostModel.findByTemperatureAndStyle(query);
   res.status(200).json(data);
 };
+
+// post_id로 게시글 1개 조회
+export const findByPostId = async (req: Request, res: Response) => {
+  const post_id: number = parseInt(req.params.post_id);
+  const data = await PostModel.findByPostId(post_id);
+  res.status(200).json(data);
+};
