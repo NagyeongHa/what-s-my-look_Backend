@@ -14,4 +14,7 @@ router.delete("/:post_id", controller.remove);
 // 온도,스타일별 전체 게시글 조회
 router.get("/image", controller.findByTemperatureAndStyle);
 
+// post_id로 게시글 1개 조회
+router.get("/:post_id", controller.findByPostId);
+
 export default router;

@@ -19,8 +19,8 @@ export const update = async (req: Request, res: Response) => {
 //게시글 삭제
 export const remove = async (req: Request, res: Response) => {
   const post_id: number = parseInt(req.params.post_id);
-  const data = await PostModel.remove(post_id);
-  res.status(200).json(data);
+  await PostModel.remove(post_id);
+  res.status(200).end();
 };
 
 // 온도, 스타일별 전체 게시글 조회
@@ -29,6 +29,13 @@ export const findByTemperatureAndStyle = async (
   res: Response
 ) => {
   const { query } = req;
-  const data = await PostModel.findByTemperatureAndStyle(query);
-  res.status(200).json(data);
+  const posts = await PostModel.findByTemperatureAndStyle(query);
+  res.status(200).json(posts);
+};
+
+// post_id로 게시글 1개 조회
+export const findByPostId = async (req: Request, res: Response) => {
+  const post_id: number = parseInt(req.params.post_id);
+  const post = await PostModel.findByPostId(post_id);
+  res.status(200).json(post);
 };
