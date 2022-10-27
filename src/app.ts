@@ -4,7 +4,7 @@ import postRouter from "./routes/post";
 import likeRouter from "./routes/like";
 
 const app = express();
-const PORT = 8080;
+const PORT = 80;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
