@@ -202,7 +202,7 @@ const getUserInfo = async (
 //callBack_uri 에서 토큰받음 -> 유저 정보 받음 ->  DB에 유저 정보 저장 -> 우리 사이트 전용 refresh token, access token 발급
 export const callBack = async (req: Request, res: Response) => {
   const { company } = req.params;
-  const { code } = req.body;
+  const code = req.params.authorizationCode;
   const { state } = req.params;
   const companyInfo = getCompanyInfo(company, code, state);
 
@@ -238,8 +238,6 @@ export const callBack = async (req: Request, res: Response) => {
       console.log("💛user_id_refreshToken:", refreshToken);
       res.cookie("refreshToken", refreshToken, { httpOnly: true });
       return res.json({ user: userInfo });
-
-      //   return res.json({ user: userInfo, refreshToken: refreshToken });
     }
 
     const signUp_id = await oauthModel.create(userInfo as UserProperty);
@@ -250,8 +248,6 @@ export const callBack = async (req: Request, res: Response) => {
       console.log("💛signUp_id_refreshToken:", refreshToken);
       res.cookie("refreshToken", refreshToken, { httpOnly: true });
       return res.json({ user: userInfo });
-
-      //   return res.json({ user: userInfo, refreshToken: refreshToken });
     }
   } catch (error) {
     console.log("callBack Error", error);
@@ -264,11 +260,10 @@ export const callBack = async (req: Request, res: Response) => {
 //해당 refresh Token 을 기반으로 access Token 발급
 export const silent_refresh = (req: Request, res: Response) => {
   const refreshToken = req.cookies["refreshToken"];
-  //   const { refreshToken } = req.body;
   if (!refreshToken) {
     return res.status(500).json({ message: "refreshToken is undefined" });
   }
-  console.log("💛refreshToken(req.cookies):", refreshToken);
+  console.log("💛refreshToken:", refreshToken);
 
   const verifyAccessToken = verifyToken(refreshToken);
   console.log("💛verifyAccessToken:", verifyAccessToken);
@@ -277,7 +272,6 @@ export const silent_refresh = (req: Request, res: Response) => {
     const accessToken = makeAccessToken(verifyAccessToken);
     const refreshToken = makeRefreshToken(verifyAccessToken);
 
-    // return res.json({ accessToken, refreshToken });
     res.cookie("refreshToken", refreshToken, { httpOnly: true });
     return res.json({ accessToken });
   }
