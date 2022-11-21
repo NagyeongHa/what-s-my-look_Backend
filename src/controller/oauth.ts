@@ -202,7 +202,7 @@ const getUserInfo = async (
 //callBack_uri 에서 토큰받음 -> 유저 정보 받음 ->  DB에 유저 정보 저장 -> 우리 사이트 전용 refresh token, access token 발급
 export const callBack = async (req: Request, res: Response) => {
   const { company } = req.params;
-  const code = req.params.authorizationCode;
+  const { code } = req.params;
   const { state } = req.params;
   const companyInfo = getCompanyInfo(company, code, state);
 
