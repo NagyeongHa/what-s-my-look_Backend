@@ -271,8 +271,8 @@ export const silent_refresh = (req: Request, res: Response) => {
   if (verifyAccessToken) {
     const accessToken = makeAccessToken(verifyAccessToken);
     const refreshToken = makeRefreshToken(verifyAccessToken);
-
-    res.cookie("refreshToken", refreshToken, { httpOnly: true });
+    console.log("=======accessToken",accessToken);
+    res.cookie("refreshToken", refreshToken, { httpOnly: true, secure:true, sameSite:'none' });
     return res.json({ accessToken });
   }
   return res.status(500).json({ message: "silent_refresh error" });
