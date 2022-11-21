@@ -202,8 +202,8 @@ const getUserInfo = async (
 //callBack_uri 에서 토큰받음 -> 유저 정보 받음 ->  DB에 유저 정보 저장 -> 우리 사이트 전용 refresh token, access token 발급
 export const callBack = async (req: Request, res: Response) => {
   const { company } = req.params;
-  const { code } = req.params;
-  const { state } = req.params;
+  const { code } = req.body;
+  const { state } = req.body;
   const companyInfo = getCompanyInfo(company, code, state);
 
   console.log("=======code", code);
@@ -236,7 +236,7 @@ export const callBack = async (req: Request, res: Response) => {
     if (user_id) {
       const refreshToken = makeRefreshToken(user_id);
       console.log("💛user_id_refreshToken:", refreshToken);
-      res.cookie("refreshToken", refreshToken, { httpOnly: true });
+      res.cookie("refreshToken", refreshToken, { httpOnly: true, secure:true, sameSite:'none' });
       return res.json({ user: userInfo });
     }
 
@@ -246,7 +246,7 @@ export const callBack = async (req: Request, res: Response) => {
     if (signUp_id) {
       const refreshToken = makeRefreshToken(signUp_id);
       console.log("💛signUp_id_refreshToken:", refreshToken);
-      res.cookie("refreshToken", refreshToken, { httpOnly: true });
+      res.cookie("refreshToken", refreshToken, { httpOnly: true, secure:true, sameSite:'none' });
       return res.json({ user: userInfo });
     }
   } catch (error) {

@@ -8,6 +8,6 @@ router.post("/silent-refresh", controller.silent_refresh);
 
 // kakao , naver , google param 으로 받아서 처리
 router.get("/:company", controller.getAuthorizationCode);
-router.get("/:company/callback/:code/:state", controller.callBack);
+router.post("/:company/callback", controller.callBack);
 
 export default router;
