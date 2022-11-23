@@ -236,7 +236,12 @@ export const callBack = async (req: Request, res: Response) => {
     if (user_id) {
       const refreshToken = makeRefreshToken(user_id);
       console.log("💛user_id_refreshToken:", refreshToken);
-      res.cookie("refreshToken", refreshToken, { httpOnly: true, secure:true, sameSite:'none',maxAge:60*60*24*14*1000 });
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        maxAge: 60 * 60 * 24 * 14 * 1000,
+      });
       return res.json({ user: userInfo });
     }
 
@@ -246,7 +251,12 @@ export const callBack = async (req: Request, res: Response) => {
     if (signUp_id) {
       const refreshToken = makeRefreshToken(signUp_id);
       console.log("💛signUp_id_refreshToken:", refreshToken);
-      res.cookie("refreshToken", refreshToken, { httpOnly: true, secure:true, sameSite:'none',maxAge:60*60*24*14*1000 });
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        maxAge: 60 * 60 * 24 * 14 * 1000,
+      });
       return res.json({ user: userInfo });
     }
   } catch (error) {
@@ -271,8 +281,13 @@ export const silent_refresh = (req: Request, res: Response) => {
   if (verifyAccessToken) {
     const accessToken = makeAccessToken(verifyAccessToken);
     const refreshToken = makeRefreshToken(verifyAccessToken);
-    console.log("=======accessToken",accessToken);
-    res.cookie("refreshToken", refreshToken, { httpOnly: true, secure:true, sameSite:'none',maxAge:60*60*24*14*1000 });
+    console.log("=======accessToken", accessToken);
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 60 * 60 * 24 * 14 * 1000,
+    });
     return res.json({ accessToken });
   }
   return res.status(500).json({ message: "silent_refresh error" });

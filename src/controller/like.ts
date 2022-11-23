@@ -5,14 +5,20 @@ import * as LikeModel from "../models/like";
 export const upLike = async (req: Request, res: Response) => {
   const likeParam = req.body; //sns_id, post_Id
   const data = await LikeModel.upLike(likeParam);
+  if (data === "ER_NO_REFERENCED_ROW_2") {
+    return res.json({ message: "sns_id is not valid" });
+  }
   res.status(201).json(data);
 };
 
 //좋아요 -1
 export const unLike = async (req: Request, res: Response) => {
   const likeParam = req.body; //sns_id, post_Id
-  await LikeModel.unLike(likeParam);
-  res.status(200).end();
+  const data = await LikeModel.unLike(likeParam);
+  if (data === "ER_NO_REFERENCED_ROW_2") {
+    return res.json({ message: "sns_id is not valid" });
+  }
+  res.status(201).json(data);
 };
 
 //좋아요 개수 및 좋아요 여부
