@@ -18,7 +18,7 @@ app.use("/like", likeRouter);
 app.use("/oauth", oauthRouter);
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("welcome");
+  res.send(`welcome ${process.env.NODE_ENV}`);
 });
 
 app.listen(PORT, () => {
