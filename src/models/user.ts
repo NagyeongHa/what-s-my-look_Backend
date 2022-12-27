@@ -37,3 +37,16 @@ export const create = async (newUser: UserProperty) => {
     }
   }
 };
+
+//sns_id로 회원정보 가져오기
+export const findUserInfoBySns_id = async (sns_id: number | string) => {
+  try {
+    const [rows]: [UserProperty[], FieldPacket[]] = await db.execute(
+      `SELECT * FROM user WHERE sns_id = ? `,
+      [sns_id]
+    );
+    return rows[0];
+  } catch (error) {
+    console.log("findUserInfoBySns_id query error:", error);
+  }
+};

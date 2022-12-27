@@ -14,28 +14,31 @@ export const verifyToken = (token: string) => {
     console.log("💛token id:", id);
     return id;
   } catch (error) {
-    const err = error as ErrorInfo;
-
-    // TokenExpiredError
-    // 기간 만료
-    if (err.name === "TokenExpiredError") {
-      console.log(error);
-    }
-
-    // JsonWebTokenError
-    // 서명이 유효하지 않거나 수정된 경우
-    if (err.name === "JsonWebTokenError") {
-      console.log(error);
-    }
-
-    // NotBeforeError
-    // jwt형식이 아닌경우
-    if (err.name === "NotBeforeError") {
-      console.log(error);
-    }
-
-    console.log("token error", error);
+    // const err = error as ErrorInfo;
+    // return err.name;
+    console.log("토큰오류", error);
     return false;
+
+    // // TokenExpiredError
+    // // 기간 만료
+    // if (err.name === "TokenExpiredError") {
+    //   console.log(error);
+    // }
+
+    // // JsonWebTokenError
+    // // 서명이 유효하지 않거나 수정된 경우
+    // if (err.name === "JsonWebTokenError") {
+    //   console.log(error);
+    // }
+
+    // // NotBeforeError
+    // // jwt형식이 아닌경우
+    // if (err.name === "NotBeforeError") {
+    //   console.log(error);
+    // }
+
+    // console.log("token error", error);
+    // return false;
   }
 };
 

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { verifyToken, makeAccessToken, makeRefreshToken } from "../utils/jwt";
 import axios from "axios";
-import * as oauthModel from "../models/user";
+import * as userModel from "../models/user";
 import { UserProperty } from "../type/UserProperty";
 
 const KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth";
@@ -230,7 +230,7 @@ export const callBack = async (req: Request, res: Response) => {
   try {
     // DB에 가입한 아이디가 있는 경우 -> 로그인 로직
     // user_id = 가입했으면 가입한 아이디를, 가입안했으면 false 를 return
-    const user_id = await oauthModel.isExistId(userInfo.sns_id, userInfo.type);
+    const user_id = await userModel.isExistId(userInfo.sns_id, userInfo.type);
     console.log("💛user_id:", user_id);
 
     if (user_id) {
@@ -245,7 +245,7 @@ export const callBack = async (req: Request, res: Response) => {
       return res.json({ user: userInfo });
     }
 
-    const signUp_id = await oauthModel.create(userInfo as UserProperty);
+    const signUp_id = await userModel.create(userInfo as UserProperty);
     console.log("💛signUp_id:", signUp_id);
 
     if (signUp_id) {
@@ -268,11 +268,15 @@ export const callBack = async (req: Request, res: Response) => {
 
 //회원가입이나 로그인 프로세스를 진행 시 쿠키에 refresh Token 저장
 //해당 refresh Token 을 기반으로 access Token 발급
-export const silent_refresh = (req: Request, res: Response) => {
+export const silent_refresh = async (req: Request, res: Response) => {
   const refreshToken = req.cookies["refreshToken"];
+
+  //const refreshToken = "";
+
   if (!refreshToken) {
     return res.status(500).json({ message: "refreshToken is undefined" });
   }
+
   console.log("💛refreshToken:", refreshToken);
 
   const verifyAccessToken = verifyToken(refreshToken);
@@ -281,14 +285,18 @@ export const silent_refresh = (req: Request, res: Response) => {
   if (verifyAccessToken) {
     const accessToken = makeAccessToken(verifyAccessToken);
     const refreshToken = makeRefreshToken(verifyAccessToken);
+    const userInfo = await userModel.findUserInfoBySns_id(verifyAccessToken);
+
+    console.log("=======user", userInfo);
     console.log("=======accessToken", accessToken);
+    console.log("=======refreshToken", refreshToken);
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
       maxAge: 60 * 60 * 24 * 14 * 1000,
     });
-    return res.json({ accessToken });
+    return res.json({ accessToken, userInfo });
   }
-  return res.status(500).json({ message: "silent_refresh error" });
+  return res.status(401).json({ message: "refreshToken is invalid" });
 };

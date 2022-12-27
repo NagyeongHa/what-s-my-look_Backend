@@ -8,7 +8,8 @@ export const upLike = async (likeParam: likeProperty) => {
   const { sns_id, post_id } = likeParam;
   const findLikeQuery =
     "SELECT IFNULL (MAX(like_id),0) like_id FROM likes where sns_id = ? AND post_id = ?";
-  const saveLikeQuery = "INSERT INTO likes (sns_id, post_id) VALUES(?,?)";
+  const saveLikeQuery =
+    "INSERT INTO likes (sns_id, post_id,regdate) VALUES(?,?,NOW())";
 
   try {
     const [rows]: [CountLikes[], FieldPacket[]] = await db.execute(
@@ -81,7 +82,7 @@ export const alreadyLiked = async ({ post_id, sns_id }: likeProperty) => {
 //내가 좋아요한 게시글 모아보기
 export const findLikePostBySnsId = async (sns_id: string) => {
   const query =
-    "SELECT p.* FROM post p INNER JOIN likes l ON p.post_id = l.post_id WHERE l.sns_id = ?;";
+    "SELECT p.* FROM post p INNER JOIN likes l ON p.post_id = l.post_id WHERE l.sns_id = ? ORDER BY l.regdate DESC;";
   try {
     const [rows] = await db.execute(query, [sns_id]);
     return rows;
