@@ -300,3 +300,10 @@ export const silent_refresh = async (req: Request, res: Response) => {
   }
   return res.status(401).json({ message: "refreshToken is invalid" });
 };
+
+//logout
+export const logout = (req: Request, res: Response) => {
+  res.clearCookie("refreshToken");
+  res.clearCookie("accessToken");
+  res.status(200).json({ success: true });
+};
