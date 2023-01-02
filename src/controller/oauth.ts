@@ -303,7 +303,12 @@ export const silent_refresh = async (req: Request, res: Response) => {
 
 //logout
 export const logout = (req: Request, res: Response) => {
-  res.clearCookie("refreshToken");
-  res.clearCookie("accessToken");
+  res.cookie("refreshToken", "", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 0,
+  });
+
   res.status(200).json({ success: true });
 };
