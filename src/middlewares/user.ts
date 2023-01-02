@@ -5,7 +5,7 @@ import * as UserModel from "../models/user";
 export default async (req: Request, res: Response, next: NextFunction) => {
   try {
     //먼저 가입된 유효한 유저인지 체크를 위해 유저 정보 가져옴 (요청에서 보내주는 토큰 이용)
-    const token = req.cookies.token;
+    const token = req.cookies["refreshToken"];
     console.log("token", token);
 
     if (!token) return next();
