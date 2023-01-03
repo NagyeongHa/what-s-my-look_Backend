@@ -3,6 +3,7 @@ import { verifyToken, makeAccessToken, makeRefreshToken } from "../utils/jwt";
 import axios from "axios";
 import * as userModel from "../models/user";
 import { UserProperty } from "../type/UserProperty";
+import path from "path";
 
 const KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth";
 const KAKAO_CLIENT_ID = process.env.KAKAO_CLIENT_ID;
@@ -241,6 +242,8 @@ export const callBack = async (req: Request, res: Response) => {
         secure: true,
         sameSite: "none",
         maxAge: 60 * 60 * 24 * 14 * 1000,
+        domain: "what-s-my-look-refactoring.vercel.app",
+        path: "/",
       });
       return res.json({ user: userInfo });
     }
@@ -256,6 +259,8 @@ export const callBack = async (req: Request, res: Response) => {
         secure: true,
         sameSite: "none",
         maxAge: 60 * 60 * 24 * 14 * 1000,
+        domain: "what-s-my-look-refactoring.vercel.app",
+        path: "/",
       });
       return res.json({ user: userInfo });
     }
@@ -271,8 +276,6 @@ export const callBack = async (req: Request, res: Response) => {
 export const silent_refresh = async (req: Request, res: Response) => {
   const refreshToken = req.cookies["refreshToken"];
 
-  //const refreshToken = "";
-
   if (!refreshToken) {
     return res.status(500).json({ message: "refreshToken is undefined" });
   }
@@ -287,14 +290,14 @@ export const silent_refresh = async (req: Request, res: Response) => {
     const refreshToken = makeRefreshToken(verifyAccessToken);
     const userInfo = await userModel.findUserInfoBySns_id(verifyAccessToken);
 
-    console.log("=======user", userInfo);
     console.log("=======accessToken", accessToken);
-    console.log("=======refreshToken", refreshToken);
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
       maxAge: 60 * 60 * 24 * 14 * 1000,
+      domain: "what-s-my-look-refactoring.vercel.app",
+      path: "/",
     });
     return res.json({ accessToken, userInfo });
   }

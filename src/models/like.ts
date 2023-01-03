@@ -25,7 +25,7 @@ export const upLike = async (likeParam: likeProperty) => {
     return result;
   } catch (error) {
     const err = error as ErrorInfo;
-    console.log("like upLike query error: ", err.code);
+    console.log("like upLike query error: ", err);
     return err.code;
   }
 };
@@ -41,7 +41,7 @@ export const unLike = async (likeParam: likeProperty) => {
     return rows;
   } catch (error) {
     const err = error as ErrorInfo;
-    console.log("like unLike query error: ", err.code);
+    console.log("like unLike query error: ", err);
     return err.code;
   }
 };
