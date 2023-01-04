@@ -242,7 +242,6 @@ export const callBack = async (req: Request, res: Response) => {
         secure: true,
         sameSite: "none",
         maxAge: 60 * 60 * 24 * 14 * 1000,
-        domain: "what-s-my-look-refactoring.vercel.app",
         path: "/",
       });
       return res.json({ user: userInfo });
@@ -259,7 +258,6 @@ export const callBack = async (req: Request, res: Response) => {
         secure: true,
         sameSite: "none",
         maxAge: 60 * 60 * 24 * 14 * 1000,
-        domain: "what-s-my-look-refactoring.vercel.app",
         path: "/",
       });
       return res.json({ user: userInfo });
@@ -296,7 +294,6 @@ export const silent_refresh = async (req: Request, res: Response) => {
       secure: true,
       sameSite: "none",
       maxAge: 60 * 60 * 24 * 14 * 1000,
-      domain: "what-s-my-look-refactoring.vercel.app",
       path: "/",
     });
     return res.json({ accessToken, userInfo });
