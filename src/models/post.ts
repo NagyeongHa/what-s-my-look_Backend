@@ -59,15 +59,12 @@ export const remove = async (post_id: number) => {
 export const findByTemperatureAndStyle = async (
   queryString: Pick<Post, "temperature" | "style">
 ) => {
-  const { temperature, style } = queryString;
+  const {style} = queryString;
+  const temperature = Number(queryString.temperature);
 
   const query = !style
-    ? `SELECT * FROM post WHERE temperature BETWEEN ${temperature - 2} AND ${
-        temperature + 2
-      }`
-    : `SELECT * FROM post WHERE temperature BETWEEN ${temperature - 2} AND ${
-        temperature + 2
-      } AND style=${style}`;
+    ? `SELECT * FROM post WHERE temperature BETWEEN ${temperature - 2} AND ${temperature + 2 }`
+    : `SELECT * FROM post WHERE temperature BETWEEN ${temperature - 2} AND ${temperature + 2 } AND style='${style}'`;
 
   try {
     const [rows] = await db.execute(query);
@@ -80,7 +77,7 @@ export const findByTemperatureAndStyle = async (
 // post_id로 게시글 1개 조회
 export const findByPostId = async (post_id: number) => {
   const query =
-    "SELECT p.*,u.name FROM post p INNER JOIN user u ON p.sns_id = u.sns_id WHERE post_id = ?;";
+    "SELECT p.*,u.name, u.profileimage  FROM post p INNER JOIN user u ON p.sns_id = u.sns_id WHERE post_id = ?;";
   try {
     const [rows] = await db.execute(query, [post_id]);
     return rows;
