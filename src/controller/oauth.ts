@@ -3,7 +3,6 @@ import { verifyToken, makeAccessToken, makeRefreshToken } from "../utils/jwt";
 import axios from "axios";
 import * as userModel from "../models/user";
 import { UserProperty } from "../type/UserProperty";
-import path from "path";
 
 const KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth";
 const KAKAO_CLIENT_ID = process.env.KAKAO_CLIENT_ID;
@@ -241,6 +240,7 @@ export const callBack = async (req: Request, res: Response) => {
         httpOnly: true,
         secure: true,
         sameSite: "none",
+        domain: ".cloudtype.app",
         maxAge: 60 * 60 * 24 * 14 * 1000,
         path: "/",
       });
@@ -257,6 +257,7 @@ export const callBack = async (req: Request, res: Response) => {
         httpOnly: true,
         secure: true,
         sameSite: "none",
+        domain: ".cloudtype.app",
         maxAge: 60 * 60 * 24 * 14 * 1000,
         path: "/",
       });
@@ -294,6 +295,7 @@ export const silent_refresh = async (req: Request, res: Response) => {
       secure: true,
       sameSite: "none",
       maxAge: 60 * 60 * 24 * 14 * 1000,
+      domain: ".cloudtype.app",
       path: "/",
     });
     return res.json({ accessToken, userInfo });
