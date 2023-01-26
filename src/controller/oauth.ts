@@ -309,6 +309,7 @@ export const logout = (req: Request, res: Response) => {
     httpOnly: true,
     secure: true,
     sameSite: "none",
+    domain: ".cloudtype.app",
     maxAge: 0,
   });
 

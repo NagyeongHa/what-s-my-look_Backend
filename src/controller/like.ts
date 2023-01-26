@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import * as LikeModel from "../models/like";
+import { Post } from "../type/Post";
 
 //좋아요 +1
 export const upLike = async (req: Request, res: Response) => {
@@ -22,14 +23,21 @@ export const unLike = async (req: Request, res: Response) => {
 };
 
 //좋아요 개수 및 좋아요 여부
-export const findCountAndAlreadyLiked = async (req: Request, res: Response) => {
-  const post_id: number = parseInt(req.params.post_id);
-  const { sns_id } = req.params;
+export const findCountAndAlreadyLiked = async (
+  req: Request<unknown, unknown, unknown, Pick<Post, "post_id" | "sns_id">>,
+  res: Response
+) => {
+  const { sns_id, post_id } = req.query;
 
   const countLikes = await LikeModel.countLikes(post_id);
   const alreadyLiked = await LikeModel.alreadyLiked({ post_id, sns_id });
+
+  if (!sns_id) {
+    const data = { total: countLikes };
+    return res.status(200).json(data);
+  }
   const data = { total: countLikes, alreadyLiked };
-  res.status(200).json(data);
+  return res.status(200).json(data);
 };
 
 //내가 좋아요한 게시글 모아보기
