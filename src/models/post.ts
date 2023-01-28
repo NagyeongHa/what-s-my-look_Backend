@@ -63,18 +63,11 @@ export const findByTemperatureAndStyle = async (
   const defaultTemperature = Number(queryString.temperature);
   let temperature = defaultTemperature;
 
-  // if (defaultTemperature < 0) {
-  //   temperature = 2;
-  //   return;
-  // }
-
-  // if (defaultTemperature > 27) {
-  //   temperature = 27;
-  //   return;
-  // }
-
   defaultTemperature < 0 ? (temperature = 2) : temperature;
   defaultTemperature > 27 ? (temperature = 27) : temperature;
+
+  console.log(defaultTemperature, temperature);
+
   const query = !style
     ? `SELECT * FROM post WHERE temperature BETWEEN ${temperature - 2} AND ${
         temperature + 2
@@ -85,6 +78,8 @@ export const findByTemperatureAndStyle = async (
 
   try {
     const [rows] = await db.execute(query);
+    console.log(rows);
+
     return rows;
   } catch (error) {
     console.log("post findByTemperatureAndStyle query error: ", error);
