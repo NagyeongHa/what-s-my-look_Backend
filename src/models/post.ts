@@ -59,12 +59,27 @@ export const remove = async (post_id: number) => {
 export const findByTemperatureAndStyle = async (
   queryString: Pick<Post, "temperature" | "style">
 ) => {
-  const {style} = queryString;
-  const temperature = Number(queryString.temperature);
+  const { style } = queryString;
+  const defaultTemperature = Number(queryString.temperature);
+  let temperature = 0;
+
+  if (defaultTemperature < 0) {
+    temperature = 2;
+    return;
+  }
+
+  if (defaultTemperature > 27) {
+    temperature = 27;
+    return;
+  }
 
   const query = !style
-    ? `SELECT * FROM post WHERE temperature BETWEEN ${temperature - 2} AND ${temperature + 2 }`
-    : `SELECT * FROM post WHERE temperature BETWEEN ${temperature - 2} AND ${temperature + 2 } AND style='${style}'`;
+    ? `SELECT * FROM post WHERE temperature BETWEEN ${temperature - 2} AND ${
+        temperature + 2
+      }`
+    : `SELECT * FROM post WHERE temperature BETWEEN ${temperature - 2} AND ${
+        temperature + 2
+      } AND style='${style}'`;
 
   try {
     const [rows] = await db.execute(query);
