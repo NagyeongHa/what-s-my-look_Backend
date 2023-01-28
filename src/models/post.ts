@@ -61,7 +61,7 @@ export const findByTemperatureAndStyle = async (
 ) => {
   const { style } = queryString;
   const defaultTemperature = Number(queryString.temperature);
-  let temperature = 0;
+  let temperature = defaultTemperature;
 
   if (defaultTemperature < 0) {
     temperature = 2;
